@@ -364,6 +364,36 @@
     .float-badge .fb-icon.js { background: rgba(255,204,0,0.2); color: #FFD700; }
     @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 
+    /* ─── IMAGE SKELETON / LAZY LOADING ─── */
+    .img-wrap {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg-dark);
+    }
+    .img-wrap::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(0,212,255,0.05) 50%,
+        rgba(255,255,255,0) 100%);
+      background-size: 200% 100%;
+      animation: skeleton-shine 1.8s infinite;
+      z-index: 1;
+      transition: opacity 0.4s ease;
+    }
+    .img-wrap.loaded::before { opacity: 0; pointer-events: none; }
+    @keyframes skeleton-shine {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    .img-wrap img {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      display: block; width: 100%; height: 100%; object-fit: cover;
+    }
+    .img-wrap.loaded img { opacity: 1; }
+
     /* ─── SKILLS ─── */
     .skills { background: transparent; position: relative; z-index: 1; }
     .skills-grid {
@@ -454,13 +484,16 @@
       position: relative; cursor: pointer; flex-shrink: 0;
       background: var(--bg-dark);
     }
+    .project-img-box .img-wrap {
+      width: 100%; height: 100%;
+    }
     .project-img-box img {
       width: 100%; height: 100%; object-fit: cover;
-      transition: transform 0.6s ease;
+      transition: transform 0.6s ease, opacity 0.5s ease;
     }
     .project-img-box:hover img { transform: scale(1.06); }
     .project-img-overlay {
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; z-index: 2;
       background: linear-gradient(to top, rgba(4,8,15,0.8) 0%, transparent 60%);
       opacity: 0; transition: opacity 0.3s;
       display: flex; align-items: center; justify-content: center;
@@ -490,6 +523,50 @@
     }
     .project-body p { color: var(--text-mid); font-size: 0.9rem; line-height: 1.6; flex-grow: 1; margin-bottom: 16px; }
 
+    /* ─── TESTIMONIAL in Project Card ─── */
+    .project-testimonial {
+      margin-top: 14px;
+      padding: 14px 16px;
+      background: rgba(0,212,255,0.05);
+      border: 1px solid rgba(0,212,255,0.15);
+      border-left: 3px solid var(--cyan);
+      border-radius: 10px;
+      position: relative;
+    }
+    .project-testimonial::before {
+      content: '\201C';
+      position: absolute; top: -4px; left: 10px;
+      font-size: 2.5rem; color: var(--cyan); opacity: 0.35;
+      font-family: Georgia, serif; line-height: 1;
+    }
+    .testimonial-text {
+      font-size: 0.82rem; color: var(--text-mid);
+      font-style: italic; line-height: 1.6;
+      padding-left: 4px; margin-bottom: 10px;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; gap: 10px;
+    }
+    .testimonial-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--cyan), var(--green));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Oxanium', sans-serif; font-size: 0.75rem; font-weight: 700;
+      color: var(--bg-deep); flex-shrink: 0;
+    }
+    .testimonial-meta { flex: 1; }
+    .testimonial-name {
+      font-family: 'Oxanium', sans-serif; font-size: 0.8rem; font-weight: 700;
+      color: var(--text-bright);
+    }
+    .testimonial-role {
+      font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--text-dim);
+    }
+    .testimonial-stars {
+      display: flex; gap: 2px; margin-bottom: 6px;
+    }
+    .testimonial-stars i { color: #FFD700; font-size: 0.7rem; }
+
     /* ─── GALLERY ─── */
     .gallery-section { position: relative; z-index: 1; }
     .gallery-grid {
@@ -507,10 +584,11 @@
       transition: var(--tr);
     }
     .gallery-item:hover { border-color: var(--border); transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+    .gallery-item .img-wrap { width: 100%; height: 100%; }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease, opacity 0.5s ease; }
     .gallery-item:hover img { transform: scale(1.07); }
     .gallery-overlay {
-      position: absolute; inset: 0;
+      position: absolute; inset: 0; z-index: 2;
       background: linear-gradient(to top, rgba(0,212,255,0.25) 0%, transparent 60%);
       opacity: 0; transition: opacity 0.3s;
       display: flex; align-items: center; justify-content: center;
@@ -533,10 +611,11 @@
       transition: var(--tr);
     }
     .profile-img-card:hover { border-color: var(--border); box-shadow: 0 0 40px rgba(0,212,255,0.15); }
-    .profile-img-card img { width: 100%; display: block; transition: transform 0.5s; }
+    .profile-img-card .img-wrap { width: 100%; }
+    .profile-img-card img { width: 100%; display: block; transition: transform 0.5s, opacity 0.5s; }
     .profile-img-card:hover img { transform: scale(1.03); }
     .profile-img-glow {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 50%;
+      position: absolute; bottom: 0; left: 0; right: 0; height: 50%; z-index: 2;
       background: linear-gradient(to top, rgba(4,8,15,0.8), transparent);
       pointer-events: none;
     }
@@ -550,6 +629,18 @@
       color: var(--cyan); margin-bottom: 24px;
     }
     .profile-info p { color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; font-size: 0.97rem; }
+
+    /* Freelance badge */
+    .freelance-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 8px 16px;
+      background: rgba(0,255,148,0.08);
+      border: 1px solid rgba(0,255,148,0.25);
+      border-radius: 99px;
+      font-family: 'Fira Code', monospace; font-size: 0.78rem;
+      color: var(--green); margin-bottom: 20px;
+    }
+    .freelance-badge i { font-size: 0.75rem; }
 
     .profile-details { margin: 30px 0; }
     .profile-row {
@@ -807,7 +898,8 @@
             <div class="ring-inner"></div>
             <div class="profile-img-wrap" id="heroImgWrap">
               <img src="guntur.jpg" alt="Guntur S.Kom" id="heroProfileImg"
-                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=774&q=80';" loading="lazy" />
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=774&q=80';" />
             </div>
           </div>
 
@@ -852,10 +944,11 @@
         <div class="skill-card reveal" style="transition-delay:0.2s">
           <div class="skill-icon-wrap"><i class="fas fa-code"></i></div>
           <h3>Pengembangan Web</h3>
-          <p>Spesialis pengembangan backend dengan PHP Native dan Laravel untuk membangun aplikasi web yang berskala, aman, dan efisien.</p>
+          <p>Spesialis pengembangan backend dengan PHP Native, Laravel, dan CodeIgniter untuk membangun aplikasi web yang berskala, aman, dan efisien.</p>
           <div class="tech-list">
             <span class="tech-tag">PHP Native</span>
             <span class="tech-tag">Laravel</span>
+            <span class="tech-tag">CodeIgniter</span>
             <span class="tech-tag">MySQL</span>
             <span class="tech-tag">JavaScript</span>
             <span class="tech-tag">HTML/CSS</span>
@@ -876,10 +969,14 @@
       </div>
       <div class="projects-grid" id="projectsGrid">
 
+        <!-- PROJECT 01 - WITH TESTIMONIAL -->
         <div class="project-card reveal" style="transition-delay:0.05s">
           <div class="project-img-box" data-caption="Sistem Penyewaan Alat Camping – Honey Rangga Lolai, Tanah Toraja">
-            <img src="1.png" alt="Penyewaan Alat Camping"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="1.png" alt="Penyewaan Alat Camping"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501555088652-021faa106b9b?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -890,13 +987,29 @@
               <span class="tech-tag">PHP Native</span><span class="tech-tag">MySQL</span>
               <span class="tech-tag">Bootstrap</span><span class="tech-tag">JavaScript</span>
             </div>
+            <div class="project-testimonial">
+              <div class="testimonial-stars">
+                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+              </div>
+              <p class="testimonial-text">"Website-nya sangat keren dan mudah digunakan! Pemesanan online jadi lebih praktis, penjualan kami meningkat drastis sejak pakai sistem ini. Terima kasih Guntur!"</p>
+              <div class="testimonial-author">
+                <div class="testimonial-avatar">HR</div>
+                <div class="testimonial-meta">
+                  <div class="testimonial-name">Honey Rangga</div>
+                  <div class="testimonial-role">// Owner, Honey Rangga Lolai</div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
         <div class="project-card reveal" style="transition-delay:0.1s">
           <div class="project-img-box" data-caption="Sistem Administrasi Desa – Kantor Desa Sakti, Kec. Bua">
-            <img src="2.png" alt="Administrasi Desa Sakti"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="2.png" alt="Administrasi Desa Sakti"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -912,8 +1025,11 @@
 
         <div class="project-card reveal" style="transition-delay:0.15s">
           <div class="project-img-box" data-caption="E-commerce Mba Jus – Website Bisnis Jus">
-            <img src="3.png" alt="E-commerce Mba Jus"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="3.png" alt="E-commerce Mba Jus"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -929,8 +1045,11 @@
 
         <div class="project-card reveal" style="transition-delay:0.2s">
           <div class="project-img-box" data-caption="Sistem Administrasi Desa Bungapati">
-            <img src="4.png" alt="Administrasi Desa Bungapati"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="4.png" alt="Administrasi Desa Bungapati"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -946,8 +1065,11 @@
 
         <div class="project-card reveal" style="transition-delay:0.25s">
           <div class="project-img-box" data-caption="Sistem Informasi Budidaya Kakao">
-            <img src="5.png" alt="Sistem Budidaya Kakao"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="5.png" alt="Sistem Budidaya Kakao"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -963,8 +1085,11 @@
 
         <div class="project-card reveal" style="transition-delay:0.3s">
           <div class="project-img-box" data-caption="Sistem Informasi Wisata Pantai Yacht Club Sorowako">
-            <img src="8.png" alt="Wisata Pantai Yacht Club"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="8.png" alt="Wisata Pantai Yacht Club"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -980,8 +1105,11 @@
 
         <div class="project-card reveal" style="transition-delay:0.35s">
           <div class="project-img-box" data-caption="Sistem Informasi Wisata Kebun Anggur">
-            <img src="7.png" alt="Wisata Kebun Anggur"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="7.png" alt="Wisata Kebun Anggur"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -995,11 +1123,13 @@
           </div>
         </div>
 
-        <!-- NEW PROJECT -->
         <div class="project-card reveal" style="transition-delay:0.4s">
           <div class="project-img-box" data-caption="Sticker ART Belopa – Sistem Kasir Toko Stiker">
-            <img src="kasirstikerartbelopa.png" alt="Sticker ART Belopa"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+            <div class="img-wrap">
+              <img src="kasirstikerartbelopa.png" alt="Sticker ART Belopa"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1572044162444-ad60f128bdea?auto=format&fit=crop&w=870&q=80';" />
+            </div>
             <div class="project-img-overlay"><div class="project-zoom-btn"><i class="fas fa-search-plus"></i></div></div>
           </div>
           <div class="project-body">
@@ -1027,23 +1157,35 @@
       </div>
       <div class="gallery-grid">
         <div class="gallery-item reveal" style="transition-delay:0.05s" data-caption="Guntur di Konferensi Teknologi">
-          <img src="guntur1.jpg" alt="Guntur di Konferensi"
-            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=687&q=80';" loading="lazy" />
+          <div class="img-wrap">
+            <img src="guntur1.jpg" alt="Guntur di Konferensi"
+              loading="lazy" decoding="async"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=687&q=80';" />
+          </div>
           <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
         </div>
         <div class="gallery-item reveal" style="transition-delay:0.1s" data-caption="Guntur Sedang Bekerja sebagai Web Developer">
-          <img src="guntur2.jpg" alt="Guntur Sedang Bekerja"
-            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=870&q=80';" loading="lazy" />
+          <div class="img-wrap">
+            <img src="guntur2.jpg" alt="Guntur Sedang Bekerja"
+              loading="lazy" decoding="async"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=870&q=80';" />
+          </div>
           <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
         </div>
         <div class="gallery-item reveal" style="transition-delay:0.15s" data-caption="Guntur Melakukan Presentasi Proyek">
-          <img src="guntur3.jpg" alt="Presentasi Proyek"
-            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=687&q=80';" loading="lazy" />
+          <div class="img-wrap">
+            <img src="guntur3.jpg" alt="Presentasi Proyek"
+              loading="lazy" decoding="async"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=687&q=80';" />
+          </div>
           <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
         </div>
         <div class="gallery-item reveal" style="transition-delay:0.2s" data-caption="Foto Profil Guntur S.Kom">
-          <img src="guntur4.jpg" alt="Foto Profil Guntur"
-            onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=774&q=80';" loading="lazy" />
+          <div class="img-wrap">
+            <img src="guntur4.jpg" alt="Foto Profil Guntur"
+              loading="lazy" decoding="async"
+              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=774&q=80';" />
+          </div>
           <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
         </div>
       </div>
@@ -1061,8 +1203,11 @@
       <div class="profile-layout">
         <div class="reveal-left">
           <div class="profile-img-card" id="profileImgCard">
-            <img src="gunturprofil.jpg" alt="Guntur S.Kom" id="profileLargeImg"
-              onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=774&q=80';" loading="lazy" />
+            <div class="img-wrap" style="width:100%;">
+              <img src="gunturprofil.jpg" alt="Guntur S.Kom" id="profileLargeImg"
+                loading="lazy" decoding="async"
+                onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=774&q=80';" />
+            </div>
             <div class="profile-img-glow"></div>
           </div>
         </div>
@@ -1070,8 +1215,17 @@
           <div class="profile-info">
             <h3>Guntur, S.Kom</h3>
             <div class="profile-role">// Web Developer</div>
-            <p>Seorang Web Developer dari Indonesia dengan gelar Sarjana Komputer (S.Kom). Saya memiliki semangat untuk menciptakan solusi digital yang efektif menggunakan teknologi web terkini.</p>
-            <p>Spesialisasi utama saya adalah pengembangan backend menggunakan PHP Native dan framework Laravel, dilengkapi dengan kemampuan merancang antarmuka pengguna yang responsif.</p>
+
+            <!-- FREELANCE BADGE -->
+            <div class="freelance-badge">
+              <i class="fas fa-laptop-code"></i>
+              Freelance Web Developer — Terbuka untuk Proyek Baru
+            </div>
+
+            <p>Seorang Web Developer Freelance dari Indonesia dengan gelar Sarjana Komputer (S.Kom). Saya bekerja secara independen melayani berbagai klien — mulai dari bisnis kecil, UMKM, hingga instansi pemerintahan desa — untuk mewujudkan kehadiran digital mereka.</p>
+            <p>Sebagai freelancer, saya memberikan layanan penuh mulai dari konsultasi, perancangan desain, pengembangan sistem, hingga pemeliharaan website. Spesialisasi utama saya adalah PHP Native, Laravel, dan CodeIgniter, dilengkapi dengan kemampuan merancang antarmuka pengguna yang responsif dan modern.</p>
+            <p>Saya percaya bahwa setiap bisnis berhak memiliki solusi digital yang berkualitas. Dengan pendekatan personal dan komunikasi yang intensif, setiap proyek saya selesaikan dengan standar profesional dan tepat waktu.</p>
+
             <div class="profile-details">
               <div class="profile-row">
                 <div class="pr-icon"><i class="fas fa-user"></i></div>
@@ -1102,10 +1256,17 @@
                 </div>
               </div>
               <div class="profile-row">
+                <div class="pr-icon"><i class="fas fa-briefcase"></i></div>
+                <div class="pr-content">
+                  <div class="pr-label">Status</div>
+                  <div class="pr-value">Freelance — Tersedia untuk Proyek</div>
+                </div>
+              </div>
+              <div class="profile-row">
                 <div class="pr-icon"><i class="fas fa-code"></i></div>
                 <div class="pr-content">
                   <div class="pr-label">Spesialisasi</div>
-                  <div class="pr-value">PHP Native & Laravel</div>
+                  <div class="pr-value">PHP Native, Laravel & CodeIgniter</div>
                 </div>
               </div>
             </div>
@@ -1152,7 +1313,7 @@
     <div class="container">
       <div class="footer-inner">
         <div class="footer-logo">Guntur<span>.DEV</span></div>
-        <p class="footer-desc">Web Developer spesialisasi PHP Native & Laravel — menciptakan solusi digital inovatif dari Sulawesi Selatan, Indonesia.</p>
+        <p class="footer-desc">Freelance Web Developer spesialisasi PHP Native, Laravel & CodeIgniter — menciptakan solusi digital inovatif dari Sulawesi Selatan, Indonesia.</p>
         <div class="footer-socials">
           <a href="https://wa.me/6285298192561" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
           <a href="https://www.instagram.com/gunturrrhafid_" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -1164,6 +1325,45 @@
   </footer>
 
   <script>
+  /* ── LAZY IMAGE LOADING with skeleton ── */
+  function initLazyImages() {
+    // All lazy images get skeleton treatment
+    document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+      const wrap = img.closest('.img-wrap');
+
+      function markLoaded() {
+        if (wrap) wrap.classList.add('loaded');
+      }
+
+      if (img.complete && img.naturalWidth > 0) {
+        markLoaded();
+      } else {
+        img.addEventListener('load', markLoaded, { once: true });
+        img.addEventListener('error', markLoaded, { once: true }); // still remove skeleton on error
+      }
+    });
+
+    // Use IntersectionObserver to trigger loading only when near viewport
+    if ('IntersectionObserver' in window) {
+      const imgObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            // If data-src is set, swap to src
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              delete img.dataset.src;
+            }
+            obs.unobserve(img);
+          }
+        });
+      }, { rootMargin: '200px 0px' });
+
+      document.querySelectorAll('img[loading="lazy"]').forEach(img => imgObserver.observe(img));
+    }
+  }
+  initLazyImages();
+
   /* ── HEADER SCROLL ── */
   const header = document.getElementById('siteHeader');
   window.addEventListener('scroll', () => {
