@@ -43,7 +43,6 @@
       cursor: default;
     }
 
-    /* ─── Scrollbar ─── */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: var(--bg-dark); }
     ::-webkit-scrollbar-thumb { background: var(--cyan); border-radius: 99px; }
@@ -53,7 +52,6 @@
     section { padding: 100px 0; }
     @media (max-width: 768px) { section { padding: 70px 0; } }
 
-    /* ─── GRID BG ─── */
     body::before {
       content: '';
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -64,7 +62,6 @@
       z-index: 0; pointer-events: none;
     }
 
-    /* ─── NOISE OVERLAY ─── */
     body::after {
       content: '';
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -72,7 +69,6 @@
       opacity: 0.4; z-index: 0; pointer-events: none;
     }
 
-    /* ─── ORBS ─── */
     .orb {
       position: fixed; border-radius: 50%; filter: blur(80px);
       pointer-events: none; z-index: 0; animation: orbDrift 20s ease-in-out infinite;
@@ -87,7 +83,6 @@
       66% { transform: translate(-20px,30px) scale(0.95); }
     }
 
-    /* ─── SECTION TITLES ─── */
     .section-header { text-align: center; margin-bottom: 70px; position: relative; z-index: 1; }
     .section-label {
       display: inline-block;
@@ -118,7 +113,6 @@
       line-height: 1.7;
     }
 
-    /* ─── BUTTONS ─── */
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 13px 30px;
@@ -153,7 +147,6 @@
       transform: translateY(-2px);
     }
 
-    /* ─── HEADER ─── */
     header {
       position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
       padding: 0;
@@ -281,7 +274,6 @@
     }
     .stat-lbl { font-size: 0.75rem; color: var(--text-dim); margin-top: 6px; letter-spacing: 1px; text-transform: uppercase; }
 
-    /* Hero Visual */
     .hero-visual {
       position: relative; display: flex;
       justify-content: center; align-items: center;
@@ -339,7 +331,7 @@
     }
     .profile-img-wrap:hover img { transform: scale(1.05); }
 
-    /* Float badges */
+    /* ─── FLOAT BADGES (4 buah sekarang) ─── */
     .float-badge {
       position: absolute; z-index: 3;
       background: rgba(8, 15, 28, 0.9);
@@ -356,12 +348,16 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 1rem;
     }
-    .float-badge-1 { top: 5%; right: -5%; animation-delay: 0s; }
-    .float-badge-2 { bottom: 12%; left: -8%; animation-delay: -2s; }
-    .float-badge-3 { top: 40%; right: -10%; animation-delay: -4s; }
-    .float-badge .fb-icon.php { background: rgba(119,73,190,0.3); color: #9b59b6; }
-    .float-badge .fb-icon.laravel { background: rgba(255,45,85,0.2); color: #FF6B6B; }
-    .float-badge .fb-icon.js { background: rgba(255,204,0,0.2); color: #FFD700; }
+    .float-badge-1 { top: 2%; right: -5%; animation-delay: 0s; }
+    .float-badge-2 { bottom: 20%; left: -8%; animation-delay: -2s; }
+    .float-badge-3 { top: 38%; right: -10%; animation-delay: -4s; }
+    .float-badge-4 { bottom: 2%; right: -4%; animation-delay: -1s; }
+
+    .float-badge .fb-icon.php      { background: rgba(119,73,190,0.3); color: #9b59b6; }
+    .float-badge .fb-icon.laravel  { background: rgba(255,45,85,0.2); color: #FF6B6B; }
+    .float-badge .fb-icon.js       { background: rgba(255,204,0,0.2); color: #FFD700; }
+    .float-badge .fb-icon.ci       { background: rgba(238,82,0,0.2); color: #EE5200; }
+
     @keyframes floatY { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 
     /* ─── IMAGE SKELETON / LAZY LOADING ─── */
@@ -523,49 +519,92 @@
     }
     .project-body p { color: var(--text-mid); font-size: 0.9rem; line-height: 1.6; flex-grow: 1; margin-bottom: 16px; }
 
-    /* ─── TESTIMONIAL in Project Card ─── */
-    .project-testimonial {
-      margin-top: 14px;
-      padding: 14px 16px;
-      background: rgba(0,212,255,0.05);
-      border: 1px solid rgba(0,212,255,0.15);
-      border-left: 3px solid var(--cyan);
-      border-radius: 10px;
-      position: relative;
+    /* ─── TESTIMONIAL SECTION ─── */
+    .testimonial-section { position: relative; z-index: 1; }
+
+    .testimonial-wrapper {
+      display: flex; justify-content: center;
     }
-    .project-testimonial::before {
-      content: '\201C';
-      position: absolute; top: -4px; left: 10px;
-      font-size: 2.5rem; color: var(--cyan); opacity: 0.35;
-      font-family: Georgia, serif; line-height: 1;
+
+    .testimonial-card-big {
+      max-width: 780px; width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      padding: 56px 60px;
+      position: relative; overflow: hidden;
+      backdrop-filter: blur(20px);
+      transition: var(--tr);
     }
-    .testimonial-text {
-      font-size: 0.82rem; color: var(--text-mid);
-      font-style: italic; line-height: 1.6;
-      padding-left: 4px; margin-bottom: 10px;
+    .testimonial-card-big:hover {
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 50px rgba(0,212,255,0.08);
+      transform: translateY(-4px);
     }
-    .testimonial-author {
-      display: flex; align-items: center; gap: 10px;
+    .testimonial-card-big::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--cyan), var(--green), transparent);
     }
-    .testimonial-avatar {
-      width: 32px; height: 32px; border-radius: 50%;
+    .testimonial-card-big::after {
+      content: ''; position: absolute;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(0,212,255,0.06), transparent 70%);
+      top: -80px; right: -80px; pointer-events: none;
+    }
+
+    .testi-quote-icon {
+      font-size: 5rem; line-height: 1;
+      color: var(--cyan); opacity: 0.2;
+      font-family: Georgia, serif;
+      position: absolute; top: 24px; left: 44px;
+    }
+
+    .testi-stars {
+      display: flex; gap: 6px; margin-bottom: 28px;
+    }
+    .testi-stars i { color: #FFD700; font-size: 1.1rem; }
+
+    .testi-text {
+      font-size: 1.25rem; color: var(--text-mid);
+      font-style: italic; line-height: 1.85;
+      margin-bottom: 40px;
+      position: relative; z-index: 1;
+    }
+
+    .testi-author-row {
+      display: flex; align-items: center; gap: 20px;
+      padding-top: 30px;
+      border-top: 1px solid var(--border-soft);
+    }
+    .testi-avatar-big {
+      width: 60px; height: 60px; border-radius: 50%;
       background: linear-gradient(135deg, var(--cyan), var(--green));
       display: flex; align-items: center; justify-content: center;
-      font-family: 'Oxanium', sans-serif; font-size: 0.75rem; font-weight: 700;
+      font-family: 'Oxanium', sans-serif; font-size: 1.1rem; font-weight: 800;
       color: var(--bg-deep); flex-shrink: 0;
+      box-shadow: 0 0 20px rgba(0,212,255,0.3);
     }
-    .testimonial-meta { flex: 1; }
-    .testimonial-name {
-      font-family: 'Oxanium', sans-serif; font-size: 0.8rem; font-weight: 700;
-      color: var(--text-bright);
+    .testi-meta-big { flex: 1; }
+    .testi-name-big {
+      font-family: 'Oxanium', sans-serif; font-size: 1.1rem; font-weight: 700;
+      color: var(--text-bright); margin-bottom: 4px;
     }
-    .testimonial-role {
-      font-family: 'Fira Code', monospace; font-size: 0.7rem; color: var(--text-dim);
+    .testi-role-big {
+      font-family: 'Fira Code', monospace; font-size: 0.82rem;
+      color: var(--cyan); opacity: 0.8;
     }
-    .testimonial-stars {
-      display: flex; gap: 2px; margin-bottom: 6px;
+    .testi-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 18px;
+      background: var(--cyan-dim);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      font-family: 'Fira Code', monospace; font-size: 0.75rem;
+      color: var(--cyan);
     }
-    .testimonial-stars i { color: #FFD700; font-size: 0.7rem; }
+    .testi-badge::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--cyan); border-radius: 50%;
+    }
 
     /* ─── GALLERY ─── */
     .gallery-section { position: relative; z-index: 1; }
@@ -630,7 +669,6 @@
     }
     .profile-info p { color: var(--text-mid); line-height: 1.8; margin-bottom: 16px; font-size: 0.97rem; }
 
-    /* Freelance badge */
     .freelance-badge {
       display: inline-flex; align-items: center; gap: 8px;
       padding: 8px 16px;
@@ -789,6 +827,7 @@
       .float-badge-1 { top: -8%; right: -2%; }
       .float-badge-2 { bottom: -5%; left: -2%; }
       .float-badge-3 { display: none; }
+      .float-badge-4 { display: none; }
     }
     @media (max-width: 767px) {
       :root { --container-padding: 16px; }
@@ -809,18 +848,20 @@
       .skills-grid { grid-template-columns: 1fr; }
       .projects-grid { grid-template-columns: 1fr; }
       .hero-stats { gap: 20px; }
+      .testimonial-card-big { padding: 36px 28px; }
+      .testi-text { font-size: 1.05rem; }
     }
     @media (max-width: 480px) {
       .hero-title { font-size: 2.2rem; }
       .hero-stats { flex-wrap: wrap; }
       .stat { min-width: 100px; }
       section { padding: 60px 0; }
+      .testimonial-card-big { padding: 28px 20px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Ambient orbs -->
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
@@ -849,6 +890,7 @@
         <a href="#home" class="active">Beranda</a>
         <a href="#skills">Keahlian</a>
         <a href="#projects">Proyek</a>
+        <a href="#testimonial">Testimoni</a>
         <a href="#gallery">Galeri</a>
         <a href="#profile">Tentang</a>
         <a href="#contact">Kontak</a>
@@ -903,6 +945,7 @@
             </div>
           </div>
 
+          <!-- 4 Float Badges: PHP, Laravel, JavaScript, CodeIgniter -->
           <div class="float-badge float-badge-1">
             <div class="fb-icon php"><i class="fab fa-php"></i></div>
             <div>PHP Native</div>
@@ -914,6 +957,10 @@
           <div class="float-badge float-badge-3">
             <div class="fb-icon js"><i class="fab fa-js-square"></i></div>
             <div>JavaScript</div>
+          </div>
+          <div class="float-badge float-badge-4">
+            <div class="fb-icon ci"><i class="fas fa-fire"></i></div>
+            <div>CodeIgniter</div>
           </div>
         </div>
 
@@ -969,7 +1016,6 @@
       </div>
       <div class="projects-grid" id="projectsGrid">
 
-        <!-- PROJECT 01 - WITH TESTIMONIAL -->
         <div class="project-card reveal" style="transition-delay:0.05s">
           <div class="project-img-box" data-caption="Sistem Penyewaan Alat Camping – Honey Rangga Lolai, Tanah Toraja">
             <div class="img-wrap">
@@ -986,19 +1032,6 @@
             <div class="tech-list">
               <span class="tech-tag">PHP Native</span><span class="tech-tag">MySQL</span>
               <span class="tech-tag">Bootstrap</span><span class="tech-tag">JavaScript</span>
-            </div>
-            <div class="project-testimonial">
-              <div class="testimonial-stars">
-                <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
-              </div>
-              <p class="testimonial-text">"Website-nya sangat keren dan mudah digunakan! Pemesanan online jadi lebih praktis, penjualan kami meningkat drastis sejak pakai sistem ini. Terima kasih Guntur!"</p>
-              <div class="testimonial-author">
-                <div class="testimonial-avatar">HR</div>
-                <div class="testimonial-meta">
-                  <div class="testimonial-name">Honey Rangga</div>
-                  <div class="testimonial-role">// Owner, Honey Rangga Lolai</div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -1147,6 +1180,40 @@
     </div>
   </section>
 
+  <!-- TESTIMONIAL -->
+  <section class="testimonial-section" id="testimonial">
+    <div class="container">
+      <div class="section-header reveal">
+        <div class="section-label"><i class="fas fa-quote-left"></i> &nbsp;Testimoni</div>
+        <h2 class="section-title">Apa Kata <span>Klien Kami</span></h2>
+        <p class="section-sub">Kepuasan klien adalah prioritas utama dalam setiap proyek yang saya kerjakan.</p>
+      </div>
+      <div class="testimonial-wrapper">
+        <div class="testimonial-card-big reveal">
+          <div class="testi-quote-icon">&ldquo;</div>
+          <div class="testi-stars">
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+            <i class="fas fa-star"></i>
+          </div>
+          <p class="testi-text">
+            "Guntur adalah developer luar biasa yang benar-benar memahami kebutuhan klien. Hasil kerjanya selalu melebihi ekspektasi — desainnya modern, sistemnya berjalan mulus, dan komunikasinya sangat responsif. Setiap detail diperhatikan dengan serius dan proyek selalu selesai tepat waktu. Sangat profesional dan terpercaya, saya tidak ragu untuk terus bekerja sama dengannya!"
+          </p>
+          <div class="testi-author-row">
+            <div class="testi-avatar-big">HR</div>
+            <div class="testi-meta-big">
+              <div class="testi-name-big">Honey Rangga</div>
+              <div class="testi-role-big">// Owner, Honey Rangga Lolai — Tanah Toraja</div>
+            </div>
+            <div class="testi-badge">Klien Terverifikasi</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- GALLERY -->
   <section class="gallery-section" id="gallery">
     <div class="container">
@@ -1216,7 +1283,6 @@
             <h3>Guntur, S.Kom</h3>
             <div class="profile-role">// Web Developer</div>
 
-            <!-- FREELANCE BADGE -->
             <div class="freelance-badge">
               <i class="fas fa-laptop-code"></i>
               Freelance Web Developer — Terbuka untuk Proyek Baru
@@ -1327,29 +1393,24 @@
   <script>
   /* ── LAZY IMAGE LOADING with skeleton ── */
   function initLazyImages() {
-    // All lazy images get skeleton treatment
     document.querySelectorAll('img[loading="lazy"]').forEach(img => {
       const wrap = img.closest('.img-wrap');
-
       function markLoaded() {
         if (wrap) wrap.classList.add('loaded');
       }
-
       if (img.complete && img.naturalWidth > 0) {
         markLoaded();
       } else {
         img.addEventListener('load', markLoaded, { once: true });
-        img.addEventListener('error', markLoaded, { once: true }); // still remove skeleton on error
+        img.addEventListener('error', markLoaded, { once: true });
       }
     });
 
-    // Use IntersectionObserver to trigger loading only when near viewport
     if ('IntersectionObserver' in window) {
       const imgObserver = new IntersectionObserver((entries, obs) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
             const img = entry.target;
-            // If data-src is set, swap to src
             if (img.dataset.src) {
               img.src = img.dataset.src;
               delete img.dataset.src;
@@ -1358,7 +1419,6 @@
           }
         });
       }, { rootMargin: '200px 0px' });
-
       document.querySelectorAll('img[loading="lazy"]').forEach(img => imgObserver.observe(img));
     }
   }
